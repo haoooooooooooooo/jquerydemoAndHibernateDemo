@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<meta charset="UTF-8">
+    </head>
+    <body> 
+        <input id="selectId">
+       <input type="button" id="btn" value="查询"><br>
+
+
+        <input id="id"><br>
+        <input id="uid"><br>
+        <input id="role"><br>
+        <input type="button" value="添加" id="userAdd"><br>
+
+        <input id="selectId2">
+        <input type="button" id="btn2" value="前后端不分离查询"><br>
+
+
+    </body>
+    <script src="js/jquery-3.7.1.js" charset="UTF-8"></script>
+     <script type="text/javascript"  charset="UTF-8">
+       $("#btn").click(()=>{
+        var uid = $("#selectId").val()
+           
+            $.getJSON("http://localhost:8080/test/selectByid",{"id":uid},
+                (data)=>{
+                   $("body").append(data.id,data.role)
+                }
+            )
+       })
+    
+        var newUser = {
+            "id":$("#id").val(),
+            "userId":$("#uid").val(),
+            "role":$("#role").val()
+        }
+
+       //用户增加  post 请求
+       $("#userAdd").click(()=>{
+          if(newUser.id!=null && newUser.userId!=null && newUser.role!=null){
+            // var  newUser2= JSON.parse(newUser)
+            // console.log(newUser)
+          $.ajax({
+            type:"POST",
+            url:"http://localhost:8080/test/add",
+            data:JSON.stringify({
+                "id":$("#id").val(),
+            "userId":$("#uid").val(),
+            "role":$("#role").val()
+            }),
+            contentType: "application/json",
+            dataType:"json",
+            success:(data)=>{
+               if(data!=null){
+                alert("添加成功")
+               }
+            }
+                  })
+          }
+        })
+     </script>
+
+    <script type="text/javascript">
+        var uid = $("#selectId2").val()
+        $("#btn2").click(()=>{
+           $.get("/test/selectByid",{"id":uid},(data)=>{
+               $("#btn2").append(data.id,data.role)
+           })
+        })
+
+    </script>
+</html>

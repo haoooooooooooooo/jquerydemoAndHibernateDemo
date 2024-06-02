@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<script  src="js/jquery-3.7.1.js" charset="UTF-8"></script>
+</head>
+<body>
+ <div id = "addDiv">
+    姓名  <input  id = "name"><br>
+    年龄  <input  id  = age><br>
+    邮箱  <input  id = "email" ><br>
+      <input  type="button"  value=" 提交"   id = "btn" >
+ </div>
+</body>
+
+<script  charset="UTF-8" >
+
+
+     $("#btn").click(()=>{
+
+         let  user = {
+             "name" : $("#name").val(),
+             "age" : $("#age").val(),
+             "email" : $("#email").val()
+         }
+
+
+
+         $.ajax({
+            type: "post",
+            url : "http://localhost:8080/user/add",
+            data: JSON.stringify(user),
+            contentType: "application/json",
+            dataType: "json",
+            success:(data) =>{
+              alert("添加成功")
+                localStorage.setItem("addUser",JSON.stringify(user));
+                window.location.href="多选框实现批量删除.html"
+           }
+          })
+     })
+
+
+</script>
+</html>

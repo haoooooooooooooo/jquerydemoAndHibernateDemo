@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<script src="js/jquery-3.7.1.js" charset="UTF-8"></script>
+
+</head>
+<body>
+          <div  id="div1">
+          姓名 <input  id="name"><br>
+          年龄 <input   id="age"><br>
+          邮箱 <input   id="email"><br>
+          <button  id="btn111"   onclick="updataUser()"> 提交</button>
+          </div>
+
+<script>
+       var  URLSearch  =   new URLSearchParams(window.location.search)
+       var uid = URLSearch.get("id");
+       console.log(uid)
+
+    $(document).ready(()=>{
+        var user = JSON.parse(localStorage.getItem("user"));
+        console.log(user)
+        $("#name").val(user.name)
+        $("#age").val(user.age)
+        $("#email").val(user.email)
+    })
+    function  updataUser(){
+        var user = JSON.parse(localStorage.getItem("user"));
+        var name = $("#name").val();
+        var age = $("#age").val();
+        var email = $("#email").val();
+
+        var newuser =({
+            "id": user.id,
+            "name":name,
+            "age":age,
+            "email":email
+        })
+        console.log(user)
+        $.ajax({
+            url: "http://localhost:8080/user/update",
+            type:"post",
+            data: JSON.stringify(newuser),
+            contentType: "application/json",
+            success(data){
+                alert("修改成功")
+                window.location.href="多选框实现批量删除.html"
+            },
+            error(cc,status,error){
+                 alert("修改失败")
+            }
+        })
+    }
+
+
+
+
+
+</script>
+          <script src="js/UpdataUser.js" charset="UTF-8"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet"  href="css/styles.css">
+</head>
+<body>
+<input type="button" id="piliang" value="批量删除" class="btn">
+<table  id=" data-table" class="styled-table">
+    <thead>
+    <tr  class="active-row">
+        <td > <input type="checkbox" class="chec-all" >全选</td>
+        <td> id </td>
+        <td> name</td>
+        <td> age</td>
+        <td> email </td>
+    </tr>
+    </thead>
+    <tbody id="tbody11">
+
+    </tbody>
+</table>
+ <input type="button"  id="add" value="新增" class="btn"  onclick="window.location.href= '新增页面.html'"   >
+
+
+</body>
+<script charset="UTF-8">
+
+    //查询用户表格数据并返回
+    $(document).ready(()=>{
+
+        var parse = JSON.parse(localStorage.getItem("addUser"));
+        console.log("新增的user为："+JSON.stringify(parse))
+
+        $.ajax({
+                url: "http://localhost:8080/user/selectAll",
+                type : "get",
+                dataType: "json",
+                success: function (data){
+                    console.log(data)
+                    var row = ""
+                    $.each(data, (i , user)=>{
+
+                        row +="<tr class='active-row'>"
+                        row += '<td> <input type="checkbox" class="tbody-item"  uid =" '+user.id+'" ></td>'
+                        row += "<td >"+ user.id + "</td>"
+                        row += "<td>"+ user.name + "</td>"
+                        row += "<td>"+ user.age + "</td>"
+                        row += "<td>"+ user.email + "</td>"
+                        row += "<td><input type='button' value='删除'    class='btn'></td>"
+                        row += "<td><input type='button' value='修改-传递整个user'   onclick='updateByUser("+JSON.stringify(user)+")' class='btn' </td>"
+                        row += "<td><input type='button' value='修改-传递uid'   onclick='updateByid("+JSON.stringify(user.id)+")' class='btn' </td>"
+                        row += "</tr>"
+                    })
+                    $("#tbody11").html(row);
+                    console.log(row)
+                }
+            }
+        )
+    })
+    //全选
+    $(".chec-all").change(function (){
+        $(".tbody-item").prop("checked",$(".chec-all").prop("checked"))
+    })
+
+
+    //批量删除
+    $("#piliang").click(()=> {
+        var checkedd = $(".tbody-item:checked")
+        console.log(checkedd)
+        let ids = []
+        $.each(checkedd, (i, item) => {
+            uid = $(item).attr("uid")
+            ids.push(uid)
+        })
+        console.log(ids)
+
+        //发送请求
+        $.ajax({
+            url: "http://localhost:8080/user/deleteIds",
+            type: "post",
+            data:  JSON.stringify({"ids":ids}),
+            contentType:"application/json",
+            success: ()=>{
+                location.reload()
+            },
+            error:(xhr,status,error)=>{
+                console.error("请求失败"+status+"错误：" + error)
+
+            }
+        })
+    })
+
+
+    //修改按钮
+    function  updateByUser( user) {
+        localStorage.setItem("user",JSON.stringify(user))
+        window.location.href="用户修改.html"
+    }
+
+
+    //根据id
+    function  updateByid(uid){
+        window.location.href="用户修改.html?id="+uid
+    }
+
+
+
+
+
+</script>
+</html>

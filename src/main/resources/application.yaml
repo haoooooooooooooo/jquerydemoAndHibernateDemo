@@ -1,0 +1,25 @@
+spring:
+  jpa:
+    #方言
+    database-platform: ${DB_PLATFORM:org.hibernate.dialect.MySQLDialect}
+    #是否打印sql语句
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+    #启动时根据实体自动更新数据库表
+    hibernate:
+      ddl-auto: update
+
+
+
+
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      username: root
+      password: 123456
+      url: jdbc:mysql://localhost:3306/mybatis_plus?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+
