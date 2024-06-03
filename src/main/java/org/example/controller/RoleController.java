@@ -46,8 +46,12 @@ public class RoleController {
 
     @PostMapping("/add")
     public  Role  add(@RequestBody  Role role){
-        System.out.println(role.toString());
+        if(role==null){
+            return null;
+        }
+
         roleMapper.save(role);
+
         return  role;
     }
 
